@@ -1,0 +1,83 @@
+{% extends 'index.html' %}
+{% load custom_filters %}
+
+{% block title %} 
+    {{ news.title }}
+{% endblock title %}
+
+{% block content %}
+    <div class="header_top">
+        <h3>
+        Лента новостей
+        </h3>
+        Публикаций на странице: {{news|length}}
+    </div>
+    {% if news %}
+    {% for n in news %}
+        {% if n.title == 'lorem' %}
+        <div class="header_news" onclick="location.href='{% url 'lorem_post' pk=n.pk %}'">
+            <h5 class="upper">{% lorem 4 w random %}</h5>
+            {{n.dataCreation|date:'M d Y'}}
+        </div>
+        <p class="author">Автор: {{ n.author }}</p>
+        {% else %}
+        <div class="header_news" onclick="location.href='{% url 'news_detail' pk=n.pk %}'">
+            <h5 class="upper">{{ n.title|censor }}</h5>
+            {{n.dataCreation|date:'M d Y'}}
+        </div>
+        <p class="author">Автор: {{ n.author }}</p>
+        {% endif %}
+
+        <div class="text_news">
+        {% if n.title == 'lorem' %}
+            {% lorem 30 w random %}
+            <a href="{% url 'lorem_post' pk=n.pk %}">Подробнее &raquo;</a>
+        {% else %}
+            {{ n.text|truncatewords:25|censor }}
+            <a href="{% url 'news_detail' pk=n.pk %}">Подробнее &raquo;</a>
+        {% endif %}
+        </div>
+    {% endfor %}
+    {% else %}
+        <h3 style="margin: 20px 40px; font-family: Arial, Helvetica, sans-serif">
+            новостей нет
+        </h3>
+    {% endif %}
+
+{% if is_paginated %}
+    <div class="paginator">
+        <span class="arrow_links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">Первая</a>
+                <a class="a_arrow" href="?page={{ page_obj.previous_page_number }}">&#129144;</a>
+            {% else %}
+                <span class="page_end page_end_left">Первая &#129144</span>
+            {% endif %}
+        </span>
+        {% comment %} ======================= {% endcomment %}
+
+        {% comment %} {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="num current_num">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="num" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %} {% endcomment %}
+
+        {% comment %} ========================== {% endcomment %}
+
+        <span class="current_page">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+        <span class="arrow_links">
+            {% if page_obj.has_next %}
+                <a class="a_arrow" href="?page={{ page_obj.next_page_number }}">&#129146;</a>
+                <a class="a_arrow" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+            {% else %}
+                <span class="page_end">&#129146; Последняя</span>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+{% endblock content %}
+
