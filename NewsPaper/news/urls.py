@@ -1,7 +1,7 @@
 # from django import views
 from django.urls import path
 from .views import NewsList, NewsDetail, LoremDetail, PostDelete, PostSearch, SearchHeader, AddPost, PostUpdate
-from . import views
+# from . import views
 
 urlpatterns = [
    

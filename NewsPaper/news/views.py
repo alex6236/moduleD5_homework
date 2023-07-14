@@ -9,8 +9,11 @@ from .forms import DateFilterForm, TitleFilterForm, TtextFilterForm, UsernameFil
 # =========================
 from django.db.models import Q
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 class NewsList(ListView):
     model = Post
@@ -25,18 +28,27 @@ class NewsList(ListView):
         context['form'] = AddPostForm() 
         return context
 # ====================================================
-# class ProtectedView(LoginRequiredMixin, TemplateView):
-#     template_name = 'add_post.html'
 
-class AddPost(CreateView):
+class ProtectedView(LoginRequiredMixin, TemplateView):
+    template_name = 'admin.html'
+
+    @login_required
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+ 
+class AddPost(LoginRequiredMixin, CreateView):
     model = Post
     form_class = AddPostForm
     template_name = 'add_post.html'
     success_url = '/news/'
 
+  
     def form_valid(self, form):
         form.instance.author = self.request.user.author
         return super().form_valid(form)
+
+    
     
     
 class PostUpdate(UpdateView):
@@ -45,9 +57,7 @@ class PostUpdate(UpdateView):
     template_name = 'edit_post.html'
     success_url = '/news/'
 
-    # def form_valid(self, form):
-    #     form.instance.author = self.request.user.author
-    #     return super().form_valid(form)
+    
 
 class PostDelete(DeleteView):
     model = Post

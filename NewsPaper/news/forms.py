@@ -1,5 +1,7 @@
 from django import forms
 from .models import *
+# ==============================
+from django.contrib.auth.models import User
 
 class DateFilterForm(forms.Form):
     dataCreation__gt = forms.DateField(
@@ -68,12 +70,19 @@ class AddPostForm(forms.ModelForm):
             'placeholder': 'Категория на выбрана',
             'class': 'form-control me-2',
         }))
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].empty_label = "Выберите категорию"
+        # self.user = kwargs.pop('user', None)
+        # super(AddPostForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Post
         fields = ['title', 'category', 'text']
+
+    # def __init__(self, *args, **kwargs):
+    #     self.user = kwargs.pop('user', None)
+    #     super(AddPostForm, self).__init__(*args, **kwargs)
 
        
