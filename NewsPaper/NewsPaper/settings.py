@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'django_filters',
     'static',
+    'signup',
 ]
 
 SITE_ID = 1
@@ -144,5 +145,5 @@ STATICFILES_DIRS = [
 
 
 
-LOGIN_URL = '/admin/'
-LOGIN_REDIRECT_URL = '/add_post/'
+LOGIN_URL = 'signup/login/'
+LOGIN_REDIRECT_URL = '/'

@@ -30,7 +30,7 @@ class NewsList(ListView):
 # ====================================================
 
 class ProtectedView(LoginRequiredMixin, TemplateView):
-    template_name = 'admin.html'
+    template_name = 'signup/login.html'
 
     @login_required
     def dispatch(self, request, *args, **kwargs):
@@ -42,13 +42,17 @@ class AddPost(LoginRequiredMixin, CreateView):
     form_class = AddPostForm
     template_name = 'add_post.html'
     success_url = '/news/'
+    login_url = '/signup/login/'
+    # user = Author.authorUser
 
-  
     def form_valid(self, form):
+        user = self.request.user
         form.instance.author = self.request.user.author
         return super().form_valid(form)
-
     
+    # @login_required
+    # def dispatch(self, request, *args, **kwargs):
+    #     return super().dispatch(request, *args, **kwargs)
     
     
 class PostUpdate(UpdateView):

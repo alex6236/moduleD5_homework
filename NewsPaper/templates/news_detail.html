@@ -14,7 +14,13 @@
     <div class="block_text">
         <p class="text_news">{{ news_detail.text|censor }}</p>
     </div>
-    <div class="block_link" >
+
+    {% comment %} 
+    кнопки "удалить и редактировать" видны только авторизованному автору 
+    {% endcomment %}
+    
+    {% if request.user.is_authenticated and news_detail.author|lower == request.user.username|lower %}
+    <div class="block_link">
         <div class="edit_btn block_shadow">
             <a class="edit_link" href="{% url 'edit_post' pk=news_detail.id %}">Редактировать</a>
         </div>
@@ -22,5 +28,6 @@
             <a class="delete_link link-body-emphasis" href="{% url 'delete_post' pk=news_detail.id %}">Удалить</a>
         </div>
     </div>
+    {% endif %}
     
 {% endblock content %}
