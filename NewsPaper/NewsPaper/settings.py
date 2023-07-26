@@ -26,12 +26,13 @@ SECRET_KEY = 'django-insecure-eucd2$q^jr+1ea)8(8by&-p+%+c_u^w$#v&dc_x2_i1qk_q_((
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'allauth',
+    'allauth.account',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # ==================================
-    # подключаем ещё приложения
     'django.contrib.sites',
     'django.contrib.flatpages',
     'news.apps.NewsConfig',
@@ -47,6 +47,14 @@ INSTALLED_APPS = [
     'django_filters',
     'static',
     'signup',
+    'users',
+    # =========== allauth ============
+    # 'allauth',
+    # 'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    
 ]
 
 SITE_ID = 1
@@ -61,7 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # ====================================================
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -139,11 +147,41 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static"
+# ]
 STATICFILES_DIRS = [
-    BASE_DIR / "static"
+    os.path.join(BASE_DIR, 'static'),
 ]
 
-
-
-LOGIN_URL = 'signup/login/'
+# LOGIN_URL = 'signup/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+   # Необходимо войти по имени пользователя в Django admin, 
+   # независимо от `allauth`
+
+   'django.contrib.auth.backends.ModelBackend',
+  
+   # специфические методы аутентификации "allauth", 
+   # такие как вход по электронной почте
+
+   'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ALLOWED_HOSTS = [ '127.0.0.1',
+                 'localhost',
+             ]
+
+ACCOUNT_FORMS = {
+    'signup': 'accounts.forms.MailRegisterForm',
+    'login': 'accounts.forms.MailLoginForm',
+    'password_change': 'accounts.forms.PasswordChangeForm',
+}

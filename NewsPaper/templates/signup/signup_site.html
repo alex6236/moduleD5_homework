@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+{% comment %} {% extends 'account/base.html' %} {% endcomment %}
+
+{% block title %}
+Register
+{% endblock title %}
+{% comment %} <title>{% block head_title %}{% endblock %}</title> {% endcomment %}
+
+{% block content %}
+<h2>
+ Register
+</h2>
+<div class="col-md-6 offset-md-2 register_form">
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<div class="d-grid gap-2">
+    <input type="submit" class="btn btn-outline-success" value="Регистрация">
+</div>
+</form>
+</div>
+{% endblock content %}

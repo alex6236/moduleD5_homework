@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="G:\SkillFactory\Django\GitHub\moduleD2_homework\venv"
+VIRTUAL_ENV="G:\SkillFactory\GitHub\moduleD5_homework\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -1,19 +1,15 @@
-# from urllib import request
 from datetime import datetime, timezone
 from django.views.generic import ListView, DetailView
 from django.core.paginator import Paginator
-from .models import Post, Author
+
+from .models import Post
 from django_filters.views import FilterView
 from .filters import PostFilter
 from .forms import DateFilterForm, TitleFilterForm, TtextFilterForm, UsernameFilterForm, AddPostForm
 # =========================
 from django.db.models import Q
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 class NewsList(ListView):
     model = Post
@@ -27,44 +23,35 @@ class NewsList(ListView):
         context['time_now'] = datetime.now(timezone.utc)
         context['form'] = AddPostForm() 
         return context
-# ====================================================
-
-class ProtectedView(LoginRequiredMixin, TemplateView):
-    template_name = 'signup/login.html'
-
-    @login_required
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-    
+# ====================================================    
  
-class AddPost(LoginRequiredMixin, CreateView):
+class AddPost(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Post
     form_class = AddPostForm
+    permission_required = ('news.add_post' )
     template_name = 'add_post.html'
     success_url = '/news/'
-    login_url = '/signup/login/'
-    # user = Author.authorUser
+    # login_url = '/accounts/login/'
+    login_url = '/signup/login_site/'
 
     def form_valid(self, form):
         user = self.request.user
         form.instance.author = self.request.user.author
         return super().form_valid(form)
     
-    # @login_required
-    # def dispatch(self, request, *args, **kwargs):
-    #     return super().dispatch(request, *args, **kwargs)
     
-    
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):
     model = Post
     form_class = AddPostForm
+    permission_required = ('news.change_post')
     template_name = 'edit_post.html'
     success_url = '/news/'
 
     
 
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin, DeleteView):
     model = Post
+    permission_required = ('news.delete_post')
     template_name = 'delete_post.html'
     success_url = '/news/'
 

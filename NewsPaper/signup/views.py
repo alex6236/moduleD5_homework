@@ -5,21 +5,28 @@ from django.views.generic.edit import FormView
 from .forms import LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.views.generic.edit import CreateView
 from .forms import RegisterForm
+from django.contrib.auth.models import Group
 
 
-class RegisterView(CreateView):
+class RegisterView(FormView):
     model = User
     form_class = RegisterForm
-    template_name = 'signup/signup.html'
-    success_url = '/'
+    template_name = 'signup/signup_site.html'
+    success_url = '/signup/login_site/'
+
+    def form_valid(self, form):
+       user = form.save(request=self.request)
+       group = Group.objects.get_or_create(name='common')[0]
+       user.groups.add(group) 
+       user.save()
+       return super().form_valid(form)
 
 
 class LoginView(FormView):
     model = User
     form_class = LoginForm
-    template_name = 'signup/login.html'
+    template_name = 'signup/login_site.html'
     success_url = '/'
 
     def form_valid(self, form):
@@ -32,8 +39,12 @@ class LoginView(FormView):
 
 
 class LogoutView(LoginRequiredMixin, TemplateView):
-    template_name = 'signup/logout.html'
+    template_name = 'signup/logout_site.html'
+    # success_url = '/'
 
     def get(self, request, *args, **kwargs):
         logout(request)
         return super().get(request, *args, **kwargs)
+    
+
+

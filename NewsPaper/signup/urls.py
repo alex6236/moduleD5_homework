@@ -3,7 +3,7 @@ from .views import RegisterView, LoginView, LogoutView
 
 app_name = 'signup'
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
+    path('login_site/', LoginView.as_view(), name='login_site'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('signup/', RegisterView.as_view(), name='signup')
+    path('signup_site/', RegisterView.as_view(), name='signup_site'),
 ]
