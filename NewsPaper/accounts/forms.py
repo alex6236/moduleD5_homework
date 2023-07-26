@@ -79,8 +79,8 @@ class PasswordChangeForm(SignupForm):
         
     def __init__(self, *args, **kwargs):
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
-        self.fields['oldpassword'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password', 'name': 'oldpassword', 'placeholder': 'Текщий 11пароль'})
-        self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password', 'name': 'password1', 'placeholder': 'Новый11 пароль'})
+        self.fields['oldpassword'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password', 'name': 'oldpassword', 'placeholder': 'Текщий пароль'})
+        self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password', 'name': 'password1', 'placeholder': 'Новый пароль'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password', 'name': 'password2', 'placeholder': 'Новый пароль(еще раз)'})
         self.fields['oldpassword'].label = '*Текщий пароль'
         self.fields['password1'].label = '*Новый пароль'
