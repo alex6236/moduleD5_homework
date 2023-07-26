@@ -13,8 +13,8 @@ class MailRegisterView(CreateView):
     model = User
     form_class = MailRegisterForm
     template_name = 'account/signup.html'
-    # success_url = '/'
-    success_url = '/users/profile/'
+    success_url = '/'
+    # success_url = '/users/profile/'
     # registration_url = '/accounts/signup/'
 
     def form_valid(self, form):
@@ -49,7 +49,13 @@ class LogoutView(LoginRequiredMixin, TemplateView):
 class PasswordChangeView(FormView):
     form_class = PasswordChangeForm
     template_name = 'account/password_change.html'
-    success_url = '/accounts/login/'
+    # success_url = '/accounts/login/'
+    success_url = '/'
     # password_change_url = '/accounts/password/change/'
 
+# class SocialAccountLoginViev(TemplateView):
+#     template_name = 'account/login_social.html'
+    # login_social_url = '/accounts/socialaccount/login/'
+    # login_social_url = '/accounts/google/login/'
 
+    
